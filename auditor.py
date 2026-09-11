@@ -1,0 +1,2 @@
+inventory = int(0)
+
