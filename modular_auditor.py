@@ -18,13 +18,17 @@ def calculate_tax(amount):
     tax_amount = amount * tax_rate
     return tax_amount
 
+def generate_report(total_stock, rejected_entries):
+    report = f"Inventory Report:\nTotal Stock: {total_stock}\nRejected Entries: {rejected_entries}"
+    return report
+
 print("Welcome to the Inventory Auditor!")
 print("Please enter the number of stock quantity:")
 
 while True:
     userinput = input()
     if get_valid_input(userinput) is None:
-        print("Exiting the Inventory Auditor. Total unit processed:", inventory, "and Number of rejected entries:", rejectcounter)
+        print(generate_report(inventory, rejectcounter))
         break
     elif get_valid_input(userinput) is True:
         newstock = int(userinput)
