@@ -1,26 +1,28 @@
 inventory = int(0)
 totalstock = int(0)
 rejectcounter = int(0)
-quit = ""
+
+def get_valid_input(user):
+    if user.lower() == "quit":
+        return None
+    elif user.isdigit():
+        return True
+    else:
+        return False
 
 print("Welcome to the Inventory Auditor!")
 print("Please enter the number of stock quantity:")
 
-while quit != "quit":
+while True:
     userinput = input()
-    if userinput == "quit":
+    if get_valid_input(userinput) is None:
         print("Exiting the Inventory Auditor. Total unit processed:", totalstock, "and Number of rejected entries:", rejectcounter)
         break
-    elif userinput.isdigit():
+    elif get_valid_input(userinput) is True:
         newstock = int(userinput)
         totalstock += newstock
         inventory += newstock
-        if inventory > 500:
-            print("Inventory limit exceeded. exiting the program.")
-            break
-        else:
-            print("Total stock entries entered:", totalstock, "Please enter the next stock quantity or type 'quit' to exit.")
-    else:
+        print("Total stock entries entered:", totalstock, "Please enter the next stock quantity or type 'quit' to exit.")
+    elif get_valid_input(userinput) is False:
         rejectcounter += 1
         print("Invalid input. Please enter a valid number or type 'quit' to exit.")
-    
