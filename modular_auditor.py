@@ -13,6 +13,11 @@ def process_delivery(current_stock, new_stock):
     current_stock += new_stock
     return current_stock
 
+def calculate_tax(amount):
+    tax_rate = 0.10  # Example tax rate of 10%
+    tax_amount = amount * tax_rate
+    return tax_amount
+
 print("Welcome to the Inventory Auditor!")
 print("Please enter the number of stock quantity:")
 
@@ -24,7 +29,9 @@ while True:
     elif get_valid_input(userinput) is True:
         newstock = int(userinput)
         inventory = process_delivery(inventory, newstock)
-        print("Total stock entries entered:", inventory, "Please enter the next stock quantity or type 'quit' to exit.")
+        calculated_tax = calculate_tax(inventory)
+        print("Total stock entries entered:", inventory, "Tax amount for this entry:", calculated_tax)
+        print("Please enter the next stock quantity or type 'quit' to exit.")
     elif get_valid_input(userinput) is False:
         rejectcounter += 1
         print("Invalid input. Please enter a valid number or type 'quit' to exit.")
