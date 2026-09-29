@@ -13,6 +13,12 @@ def load_inventory(filename):
                 orders.append(line)
     return orders
 
+def save_inventory(filename, orders):
+    """Write-Back: Saves all orders to inventory.txt."""
+    with open(filename, "a+") as file:
+        for order in orders:
+            file.write(f"{order}\n")
+
 def get_valid_input(user):
     if user.lower() == "quit":
         return None
@@ -48,6 +54,8 @@ def main():
     while True:
         product_name = input("\nEnter Product Name:")
         if get_valid_input(product_name) is None:
+            print(f"\nOrder successfully saved to {FILENAME}")
+            save_inventory(FILENAME, new_orders)
             #print(generate_report(inventory, rejectcounter))
             break
         quantity = input("Enter Quantity:")
