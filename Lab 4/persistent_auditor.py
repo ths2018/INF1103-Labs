@@ -1,5 +1,4 @@
-rejectcounter = int(0)
-
+stock = 0
 FILENAME = "inventory.txt"
 
 def load_inventory(filename):
@@ -42,20 +41,29 @@ def main():
     if current_orders:
         for order in current_orders:
             print(order)
-    product_name = input("\nEnter Product Name:")
+    new_orders = []
+    rejectcounter = 0
+    next_id = 1001 + len(current_orders)
 
     while True:
-        userinput = input()
-        if get_valid_input(userinput) is None:
-            print(generate_report(inventory, rejectcounter))
+        product_name = input("\nEnter Product Name:")
+        if get_valid_input(product_name) is None:
+            #print(generate_report(inventory, rejectcounter))
             break
-        elif get_valid_input(userinput) is True:
-            newstock = int(userinput)
-            inventory = process_delivery(inventory, newstock)
-            calculated_tax = calculate_tax(inventory)
-            print("Total stock entries entered:", inventory, "Tax amount for this entry:", calculated_tax)
-            print("Please enter the next stock quantity or type 'quit' to exit.")
-        elif get_valid_input(userinput) is False:
+        quantity = input("Enter Quantity:")
+        if get_valid_input(quantity) is None:
+            break
+        elif get_valid_input(quantity) is True:
+            newstock = int(quantity)
+            new_order = f"{next_id}, {product_name}, {newstock}"
+            new_orders.append(new_order)
+            print("New Order Added:\n",new_order)
+            next_id += 1
+            #stock = process_delivery(stock, newstock)
+            #calculated_tax = calculate_tax(stock)
+            #print("Total stock entries entered:", stock, "Tax amount for this entry:", calculated_tax)
+            #print("Please enter the next stock quantity or type 'quit' to exit.")
+        elif get_valid_input(quantity) is False:
             rejectcounter += 1
             print("Invalid input. Please enter a valid number or type 'quit' to exit.")
 
