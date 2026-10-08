@@ -1,6 +1,8 @@
 import json
 import os
 
+FILENAME = "inventory.json"
+
 DEFAULT_INVENTORY = {
     "P001": {"name": "Laptop", "price": 1200.00, "stock": 15},
     "P002": {"name": "Mouse", "price": 25.50, "stock": 40},
@@ -74,3 +76,30 @@ def search_product(inventory):
     print(f"Price: ${item['price']:.2f}")
     print(f"Stock: {item['stock']}")
     print("-" * 47)
+
+def load_inventory(filename=FILENAME):
+    """Load inventory from JSON. Creates default data if the file is missing."""
+    if os.path.exists(filename):
+        print(f"{filename} found.")
+        try:
+            with open(filename, "r") as f:
+                inventory = json.load(f)
+            print("Inventory loaded successfully.")
+            return inventory
+        except (json.JSONDecodeError, OSError):
+            print("Error reading file. Starting with default inventory.")
+    else:
+        print(f"{filename} not found. Creating default inventory.")
+    save_inventory(DEFAULT_INVENTORY, filename)
+    return dict(DEFAULT_INVENTORY)
+ 
+ 
+def save_inventory(inventory, filename=FILENAME):
+    """Write inventory dictionary to JSON. Returns True on success."""
+    try:
+        with open(filename, "w") as f:
+            json.dump(inventory, f, indent=4)
+        return True
+    except OSError:
+        print("Error: could not save inventory.")
+        return False
