@@ -91,8 +91,7 @@ def load_inventory(filename=FILENAME):
     else:
         print(f"{filename} not found. Creating default inventory.")
     save_inventory(DEFAULT_INVENTORY, filename)
-    return dict(DEFAULT_INVENTORY)
- 
+    return dict(DEFAULT_INVENTORY)    
  
 def save_inventory(inventory, filename=FILENAME):
     """Write inventory dictionary to JSON. Returns True on success."""
@@ -103,3 +102,37 @@ def save_inventory(inventory, filename=FILENAME):
     except OSError:
         print("Error: could not save inventory.")
         return False
+
+def main():
+    print_header()
+    print()
+    inventory = load_inventory()
+    print_menu()
+ 
+    while True:
+        choice = input("\nEnter option: ").strip()
+        if choice == "1":
+            display_all(inventory)
+        elif choice == "2":
+            add_product(inventory)
+        elif choice == "3":
+            update_stock(inventory)
+        elif choice == "4":
+            search_product(inventory)
+        elif choice == "5":
+            print("\nSaving inventory...")
+            if save_inventory(inventory):
+                print(f"Inventory saved successfully to {FILENAME}.")
+        elif choice == "6":
+            print("\nSaving inventory before exit...")
+            if save_inventory(inventory):
+                print("Inventory saved successfully.")
+            print("\nThank you for using Inventory Management System.")
+            print("Program terminated.")
+            break
+        else:
+            print("Invalid option. Please choose 1-6.")
+ 
+ 
+if __name__ == "__main__":
+    main()
