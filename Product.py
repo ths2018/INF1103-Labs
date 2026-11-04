@@ -74,7 +74,7 @@ class PhysicalProduct(Product):
         print(super().get_display_text() + f" | Weight: {self.__weight:.2f} kg")
 
     def get_fulfilment_info(self):
-        return "Ships to the customer's address."
+        return "This product requires physical shipping."
  
     def to_dict(self):
         data = super().to_dict()
@@ -104,7 +104,7 @@ class DigitalProduct(Product):
         print(super().get_display_text() + f" | Download Size: {self.__download_size:.2f} MB")
 
     def get_fulfilment_info(self):
-        return "Download link sent by email."
+        return "This product is delivered digitally."
     
     def to_dict(self):
         data = super().to_dict()

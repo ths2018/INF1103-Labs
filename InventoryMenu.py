@@ -51,6 +51,7 @@ class InventoryMenu:
             return
         if self._inventory.add_product(product):
             print("Product added.")
+            print(product.get_fulfilment_info())
         else:
             print("A product with that ID already exists.")
 
