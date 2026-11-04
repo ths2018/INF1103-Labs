@@ -41,6 +41,10 @@ class Product(ABC):
     @abstractmethod
     def display_information(self):
         print(self.get_display_text())
+
+    def get_fulfilment_info(self):
+        """Return a string describing how this product is fulfilled."""
+        pass
  
     def to_dict(self):
         return {
@@ -67,7 +71,10 @@ class PhysicalProduct(Product):
         return self.__weight
  
     def display_information(self):
-            print(super().get_display_text() + f" | Weight: {self.__weight:.2f} kg")
+        print(super().get_display_text() + f" | Weight: {self.__weight:.2f} kg")
+
+    def get_fulfilment_info(self):
+        return "Ships to the customer's address."
  
     def to_dict(self):
         data = super().to_dict()
@@ -95,7 +102,10 @@ class DigitalProduct(Product):
 
     def display_information(self):
         print(super().get_display_text() + f" | Download Size: {self.__download_size:.2f} MB")
- 
+
+    def get_fulfilment_info(self):
+        return "Download link sent by email."
+    
     def to_dict(self):
         data = super().to_dict()
         data.update({
