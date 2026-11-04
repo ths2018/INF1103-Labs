@@ -64,11 +64,8 @@ class PhysicalProduct(Product):
     def weight(self):
         return self.__weight
  
-    def get_display_text(self):
-        return f"{super().get_display_text()} | Weight: {self.__weight:.2f} kg"
-
     def display_information(self):
-        print(self.get_display_text())
+            print(super().get_display_text() + f" | Weight: {self.__weight:.2f} kg")
  
     def to_dict(self):
         data = super().to_dict()
@@ -92,12 +89,9 @@ class DigitalProduct(Product):
     @property
     def download_size(self):
         return self.__download_size
- 
-    def get_display_text(self):
-        return f"{super().get_display_text()} | Download Size: {self.__download_size:.2f} MB"
 
     def display_information(self):
-        print(self.get_display_text())
+        print(super().get_display_text() + f" | Download Size: {self.__download_size:.2f} MB")
  
     def to_dict(self):
         data = super().to_dict()
