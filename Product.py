@@ -77,7 +77,7 @@ class PhysicalProduct(Product, CanBeShipped):
         return self.__weight
  
     def display_information(self):
-        print(super().get_display_text() + f" | Weight: {self.__weight:.2f} kg")
+        print(super().get_display_text() + f" | Weight: {self.__weight:.2f} kg" + f" | {self.get_fulfilment_info()}" + f" | Shipping cost: ${self.calculate_shipping_cost():.2f}")
 
     def get_fulfilment_info(self):
         return "This product requires physical shipping."
@@ -111,7 +111,7 @@ class DigitalProduct(Product):
         return self.__download_size
 
     def display_information(self):
-        print(super().get_display_text() + f" | Download Size: {self.__download_size:.2f} MB")
+        print(super().get_display_text() + f" | Download Size: {self.__download_size:.2f} MB" + f" | {self.get_fulfilment_info()}")
 
     def get_fulfilment_info(self):
         return "This product is delivered digitally."
