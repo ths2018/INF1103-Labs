@@ -1,11 +1,5 @@
 from abc import ABC, abstractmethod
 
-class CanBeShipped(ABC):
-    @abstractmethod
-    def calculate_shipping_cost(self):
-        """Calculate the shipping cost for this product."""
-        pass
-
 class Product(ABC):
  
     def __init__(self, product_id, name, price, stock):
@@ -65,7 +59,13 @@ class Product(ABC):
     def from_dict(data):
         pass  # This method should be implemented in subclasses to create an instance from a dictionary
 
-class PhysicalProduct(Product):
+class CanBeShipped(ABC):
+    @abstractmethod
+    def calculate_shipping_cost(self):
+        """Calculate the shipping cost for this product."""
+        pass
+
+class PhysicalProduct(Product, CanBeShipped):
     """Represents a physical product with weight"""
  
     def __init__(self, product_id, name, price, stock, weight):
@@ -81,6 +81,10 @@ class PhysicalProduct(Product):
 
     def get_fulfilment_info(self):
         return "This product requires physical shipping."
+
+    def calculate_shipping_cost(self):
+        """Flat $5.00 handling fee plus $1.00 per kg."""
+        return 5.00 + 1.00 * self.__weight
  
     def to_dict(self):
         data = super().to_dict()

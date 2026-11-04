@@ -1,4 +1,4 @@
-from Product import DigitalProduct, PhysicalProduct
+from Product import CanBeShipped, DigitalProduct, PhysicalProduct
 from File_handling import save_inventory
 
 
@@ -52,6 +52,8 @@ class InventoryMenu:
         if self._inventory.add_product(product):
             print("Product added.")
             print(product.get_fulfilment_info())
+            if isinstance(product, CanBeShipped):
+                print(f"Shipping cost: ${product.calculate_shipping_cost():.2f}")
         else:
             print("A product with that ID already exists.")
 
