@@ -1,4 +1,4 @@
-from Product import PhysicalProduct, Product
+from Product import DigitalProduct, PhysicalProduct, Product
 from File_handling import save_inventory
 
 
@@ -18,13 +18,13 @@ class InventoryMenu:
 
     def _read_product(self):
         """Ask for product details. Returns a Product, or None if input was invalid."""
-        is_physical = input("Is this a physical product or digital? (physical/digital): ").strip().lower() == "physical"
-        if is_physical:
+        productselection = input("Is this a physical product or digital? (physical/digital): ").strip().lower()
+        if productselection == "physical":
             product_id = input("Product ID: ").strip()
             name = input("Name: ").strip()
             price = self.read_number("Price: ", float)
             stock = self.read_number("Stock: ", int)
-            weight = self.read_number("Weight (kg): ", float) if is_physical else 0
+            weight = self.read_number("Weight (kg): ", float) if productselection == "physical" else 0
 
             if (not product_id or not name or price is None or price < 0
                     or stock is None or weight is None or weight < 0):
@@ -32,28 +32,32 @@ class InventoryMenu:
                 return None
 
             try:
-                if is_physical:
+                if productselection == "physical":
                     return PhysicalProduct(product_id, name, price, stock, weight)
                 return Product(product_id, name, price, stock)
             except ValueError as error:
                 print(error)
                 return None
-        elif is_physical is False:
+        elif productselection == "digital":
             product_id = input("Product ID: ").strip()
             name = input("Name: ").strip()
             price = self.read_number("Price: ", float)
             stock = self.read_number("Stock: ", int)
+            download_size = self.read_number("Download Size (MB): ", float)
 
             if (not product_id or not name or price is None or price < 0
-                    or stock is None):
+                    or stock is None or download_size is None or download_size < 0):
                 print("Invalid input. Product not added.")
                 return None
 
             try:
-                return Product(product_id, name, price, stock)
+                return DigitalProduct(product_id, name, price, stock, download_size)
             except ValueError as error:
                 print(error)
                 return None
+        else:
+            print("Invalid product type. Please enter 'physical' or 'digital'.")
+            return None
 
     def add_product_option(self):
         product = self._read_product()

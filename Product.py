@@ -81,3 +81,32 @@ class PhysicalProduct(Product):
     def from_dict(data):
         return PhysicalProduct(data["product_id"], data["name"], data["price"],
                                data["stock"], data["weight"])
+
+class DigitalProduct(Product):
+    """Represents a digital product with download size"""
+ 
+    def __init__(self, product_id, name, price, stock, download_size):
+        super().__init__(product_id, name, price, stock)
+        self.__download_size = float(download_size)
+ 
+    @property
+    def download_size(self):
+        return self.__download_size
+ 
+    def get_display_text(self):
+        return f"{super().get_display_text()} | Download Size: {self.__download_size:.2f} MB"
+
+    def display_information(self):
+        print(self.get_display_text())
+ 
+    def to_dict(self):
+        data = super().to_dict()
+        data.update({
+            "download_size": self.__download_size,
+        })
+        return data
+ 
+    @staticmethod
+    def from_dict(data):
+        return DigitalProduct(data["product_id"], data["name"], data["price"],
+                              data["stock"], data["download_size"])
