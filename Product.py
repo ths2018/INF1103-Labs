@@ -1,5 +1,11 @@
 from abc import ABC, abstractmethod
 
+class CanBeShipped(ABC):
+    @abstractmethod
+    def calculate_shipping_cost(self):
+        """Calculate the shipping cost for this product."""
+        pass
+
 class Product(ABC):
  
     def __init__(self, product_id, name, price, stock):
