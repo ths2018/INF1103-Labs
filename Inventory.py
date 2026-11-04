@@ -1,6 +1,3 @@
-from Product import Product
-
-
 class Inventory:
     def __init__(self):
         self.__products = []

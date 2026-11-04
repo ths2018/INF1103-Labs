@@ -1,5 +1,6 @@
-class Product:
-    """Represents and manages a single product (SRP: one product, its data and its state)."""
+from abc import ABC, abstractmethod
+
+class Product(ABC):
  
     def __init__(self, product_id, name, price, stock):
         # "Private" by convention (name mangling): outside code should use the methods/properties.
@@ -37,10 +38,10 @@ class Product:
         return (f"ID: {self.__product_id:<6} | Name: {self.__name:<15} | "
                 f"Price: ${self.__price:>9.2f} | Stock: {self.__stock}")
 
+    @abstractmethod
     def display_information(self):
         print(self.get_display_text())
  
-    # ---- helpers so the file-handling code doesn't need to touch private attributes ----
     def to_dict(self):
         return {
             "product_id": self.__product_id,
@@ -50,8 +51,9 @@ class Product:
         }
  
     @staticmethod
+    @abstractmethod
     def from_dict(data):
-        return Product(data["product_id"], data["name"], data["price"], data["stock"])
+        pass  # This method should be implemented in subclasses to create an instance from a dictionary
 
 class PhysicalProduct(Product):
     """Represents a physical product with weight"""
@@ -70,6 +72,7 @@ class PhysicalProduct(Product):
     def to_dict(self):
         data = super().to_dict()
         data.update({
+            "type": "physical",
             "weight": self.__weight,
         })
         return data
@@ -96,6 +99,7 @@ class DigitalProduct(Product):
     def to_dict(self):
         data = super().to_dict()
         data.update({
+            "type": "digital",
             "download_size": self.__download_size,
         })
         return data
