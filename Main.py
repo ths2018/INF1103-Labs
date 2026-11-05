@@ -1,9 +1,7 @@
-from Inventory import Inventory
 from InventoryMenu import InventoryMenu
 from File_handling import load_inventory
 
 FILENAME = "inventory.json"
-
 
 def print_menu():
     print("\n=== Inventory Management System ===")

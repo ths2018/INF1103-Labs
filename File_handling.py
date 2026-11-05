@@ -1,6 +1,7 @@
 import json
 import os
-from Product import PhysicalProduct, DigitalProduct
+from PhysicalProduct import PhysicalProduct
+from DigitalProduct import DigitalProduct
 from Inventory import Inventory
 
 PRODUCT_TYPES = {

@@ -1,6 +1,7 @@
-from Product import CanBeShipped, DigitalProduct, PhysicalProduct
+from PhysicalProduct import PhysicalProduct
+from DigitalProduct import DigitalProduct
+from CanBeShipped import CanBeShipped
 from File_handling import save_inventory
-
 
 class InventoryMenu:
 
