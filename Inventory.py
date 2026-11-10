@@ -1,4 +1,3 @@
-from typing import Optional
 from Product import Product
 
 class Inventory:
@@ -7,12 +6,21 @@ class Inventory:
 
     def add_product(self, product: Product) -> bool:
         """Add a product. Returns False if the ID already exists."""
-        if self.find_by_id(product.product_id) is not None:
+        if self.find_product(product.product_id) is not None:
             return False
         self.__products.append(product)
         return True
 
-    def find_by_id(self, product_id: str) -> Optional[Product]:
+    def remove_product(self, product_id: str) -> bool:
+        """Remove the matching Product reference. Returns False if not found.
+        The Product object itself is not changed or destroyed."""
+        product = self.find_product(product_id)
+        if product is None:
+            return False
+        self.__products.remove(product)
+        return True
+
+    def find_product(self, product_id: str) -> Product | None:
         """Return the exact product with this ID, or None."""
         for product in self.__products:
             if product.product_id.lower() == product_id.lower():
@@ -33,6 +41,6 @@ class Inventory:
             product.display_information()
         return self.__products
 
-    def get_products(self):
+    def get_products(self) -> list[Product]:
         """Return a copy of the list so outside code can't alter the internal list."""
         return list(self.__products)

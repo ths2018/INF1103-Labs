@@ -93,7 +93,7 @@ class InventoryMenu:
             print("A product with that ID already exists.")
 
     def update_stock_option(self):
-        product = self._inventory.find_by_id(input("Product ID to update: ").strip())
+        product = self._inventory.find_product(input("Product ID to update: ").strip())
         if product is None:
             print("Product not found.")
             return
