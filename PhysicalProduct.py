@@ -1,11 +1,12 @@
 from Product import Product
 from CanBeShipped import CanBeShipped
+from Supplier import Supplier
 
 class PhysicalProduct(Product, CanBeShipped):
     """Represents a physical product with weight"""
  
-    def __init__(self, product_id, name, price, stock, weight):
-        super().__init__(product_id, name, price, stock)
+    def __init__(self, product_id: str, name: str, price: float, stock: int,  supplier: Supplier, weight: float):
+        super().__init__(product_id, name, price, stock, supplier)
         self.__weight = float(weight)
  
     @property
@@ -31,6 +32,6 @@ class PhysicalProduct(Product, CanBeShipped):
         return data
  
     @staticmethod
-    def from_dict(data):
+    def from_dict(data, supplier: Supplier):
         return PhysicalProduct(data["product_id"], data["name"], data["price"],
-                               data["stock"], data["weight"])
+                               data["stock"], supplier, data["weight"])

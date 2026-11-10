@@ -1,18 +1,38 @@
-[
-    {
-        "product_id": "P001",
-        "name": "Keyboard",
-        "price": 100.0,
-        "stock": 10,
-        "type": "physical",
-        "weight": 1.2
-    },
-    {
-        "product_id": "P002",
-        "name": "GTA6",
-        "price": 89.0,
-        "stock": 520,
-        "type": "digital",
-        "download_size": 90000.0
-    }
-]
+{
+    "suppliers": [
+        {
+            "supplier_id": "S001",
+            "name": "Rockstar Inc.",
+            "contact_email": "help@rockstar.inc"
+        }
+    ],
+    "products": [
+        {
+            "product_id": "P001",
+            "name": "GTA6",
+            "price": 89.9,
+            "stock": 100,
+            "supplier_id": "S001",
+            "type": "digital",
+            "download_size": 89000.0
+        },
+        {
+            "product_id": "Keyboard",
+            "name": "P002",
+            "price": 120.0,
+            "stock": 10,
+            "supplier_id": "S001",
+            "type": "physical",
+            "weight": 1.0
+        },
+        {
+            "product_id": "P003",
+            "name": "SSNI-985",
+            "price": 30.99,
+            "stock": 10,
+            "supplier_id": "S002",
+            "type": "digital",
+            "download_size": 2000.0
+        }
+    ]
+}

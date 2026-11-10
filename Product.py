@@ -1,13 +1,16 @@
 from abc import ABC, abstractmethod
 
+from Supplier import Supplier
+
 class Product(ABC):
  
-    def __init__(self, product_id, name, price, stock):
+    def __init__(self, product_id: str, name: str, price: float, stock: int, supplier: Supplier):
         # "Private" by convention (name mangling): outside code should use the methods/properties.
         self.__product_id = product_id
         self.__name = name
         self.__price = float(price)
         self.__stock = 0
+        self.__supplier: Supplier = supplier
         self.update_stock(stock)  # reuse validation instead of assigning directly
  
     # ---- read-only access (no setters, so values can't be changed from outside) ----
@@ -26,6 +29,14 @@ class Product(ABC):
     @property
     def stock(self):
         return self.__stock
+
+    @property
+    def supplier(self) -> Supplier:
+        return self.__supplier
+
+    def display_supplier_information(self):
+        """Show the supplier's details through this product."""
+        self.__supplier.display_information()
  
     # ---- behaviour ----
     def update_stock(self, quantity):
@@ -52,9 +63,10 @@ class Product(ABC):
             "name": self.__name,
             "price": self.__price,
             "stock": self.__stock,
+            "supplier_id": self.__supplier.supplier_id,
         }
  
     @staticmethod
     @abstractmethod
-    def from_dict(data):
+    def from_dict(data, supplier: Supplier):
         pass  # This method should be implemented in subclasses to create an instance from a dictionary

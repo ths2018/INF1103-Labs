@@ -1,10 +1,11 @@
 from Product import Product
+from Supplier import Supplier
 
 class DigitalProduct(Product):
     """Represents a digital product with download size"""
  
-    def __init__(self, product_id, name, price, stock, download_size):
-        super().__init__(product_id, name, price, stock)
+    def __init__(self, product_id: str, name: str, price: float, stock: int, supplier: Supplier, download_size: float):
+        super().__init__(product_id, name, price, stock, supplier)
         self.__download_size = float(download_size)
  
     @property
@@ -26,6 +27,6 @@ class DigitalProduct(Product):
         return data
  
     @staticmethod
-    def from_dict(data):
+    def from_dict(data, supplier: Supplier):
         return DigitalProduct(data["product_id"], data["name"], data["price"],
-                              data["stock"], data["download_size"])
+                              data["stock"], supplier, data["download_size"])

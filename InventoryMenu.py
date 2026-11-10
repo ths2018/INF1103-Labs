@@ -2,6 +2,7 @@ from PhysicalProduct import PhysicalProduct
 from DigitalProduct import DigitalProduct
 from CanBeShipped import CanBeShipped
 from File_handling import save_inventory
+from Supplier import Supplier
 
 class InventoryMenu:
 
@@ -16,6 +17,34 @@ class InventoryMenu:
             return number_type(input(prompt))
         except ValueError:
             return None
+
+    def _find_supplier(self, supplier_id):
+        """Return an existing Supplier with this ID from the inventory, or None."""
+        for product in self._inventory.get_products():
+            if product.supplier.supplier_id == supplier_id:
+                return product.supplier
+        return None
+
+    def _read_supplier(self):
+        """Ask for a supplier ID. Reuse an existing Supplier, or create a new one.
+        Returns a Supplier, or None if input was invalid."""
+        supplier_id = input("Supplier ID: ").strip()
+        if not supplier_id:
+            print("Supplier ID cannot be empty.")
+            return None
+
+        existing = self._find_supplier(supplier_id)
+        if existing is not None:
+            print(f"Using existing supplier: {existing.name}")
+            return existing
+
+        print("New supplier. Please enter their details.")
+        name = input("Supplier name: ").strip()
+        email = input("Supplier contact email: ").strip()
+        if not name or "@" not in email:
+            print("Invalid supplier details.")
+            return None
+        return Supplier(supplier_id, name, email)
 
     def _read_product(self):
         """Ask for product details. Returns a Product, or None if input was invalid."""
@@ -38,10 +67,15 @@ class InventoryMenu:
             print("Invalid input. Product not added.")
             return None
 
+        supplier = self._read_supplier()
+        if supplier is None:
+            print("Product not added.")
+            return None
+
         try:
             if product_type == "physical":
-                return PhysicalProduct(product_id, name, price, stock, extra)
-            return DigitalProduct(product_id, name, price, stock, extra)
+                return PhysicalProduct(product_id, name, price, stock, supplier, extra)
+            return DigitalProduct(product_id, name, price, stock, supplier, extra)
         except ValueError as error:
             print(error)
             return None
@@ -79,6 +113,7 @@ class InventoryMenu:
             print("No matching products.")
         for product in results:
             product.display_information()
+            product.display_supplier_information()
 
     def save_option(self):
         save_inventory(self._inventory, self._filename)
