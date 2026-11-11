@@ -10,7 +10,7 @@ class Supplier:
         print(f"Name        : {self.name}")
         print(f"Contact     : {self.contact_email}")
 
-    def to_dict(self):
+    def to_dict(self) -> dict[str, str]:
         return {
             "supplier_id": self.supplier_id,
             "name": self.name,
@@ -18,7 +18,7 @@ class Supplier:
         }
 
     @staticmethod
-    def from_dict(data):
+    def from_dict(data: dict[str, str]) -> "Supplier":
         return Supplier(data["supplier_id"], data["name"], data["contact_email"])
 
 if __name__ == "__main__":

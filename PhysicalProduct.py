@@ -5,12 +5,12 @@ from Supplier import Supplier
 class PhysicalProduct(Product, CanBeShipped):
     """Represents a physical product with weight"""
  
-    def __init__(self, product_id: str, name: str, price: float, stock: int,  supplier: Supplier, weight: float):
+    def __init__(self, product_id: str, name: str, price: float, stock: int,  supplier: Supplier, weight: float) -> None:
         super().__init__(product_id, name, price, stock, supplier)
         self.__weight = float(weight)
  
     @property
-    def weight(self):
+    def weight(self) -> float:
         return self.__weight
  
     def display_information(self):
@@ -19,7 +19,7 @@ class PhysicalProduct(Product, CanBeShipped):
     def get_fulfilment_info(self):
         return "This product requires physical shipping."
 
-    def calculate_shipping_cost(self):
+    def calculate_shipping_cost(self) -> float:
         """Flat $5.00 handling fee plus $1.00 per kg."""
         return 5.00 + 1.00 * self.__weight
  
@@ -32,6 +32,6 @@ class PhysicalProduct(Product, CanBeShipped):
         return data
  
     @staticmethod
-    def from_dict(data, supplier: Supplier):
+    def from_dict(data: dict[str, str | int | float], supplier: Supplier) -> "PhysicalProduct":
         return PhysicalProduct(data["product_id"], data["name"], data["price"],
                                data["stock"], supplier, data["weight"])

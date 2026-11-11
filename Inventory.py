@@ -1,7 +1,7 @@
 from Product import Product
 
 class Inventory:
-    def __init__(self):
+    def __init__(self) -> None:
         self.__products: list[Product] = []
 
     def add_product(self, product: Product) -> bool:
@@ -33,10 +33,10 @@ class Inventory:
         return [p for p in self.__products
                 if keyword in p.product_id.lower() or keyword in p.name.lower()]
 
-    def display_all(self) -> list[Product]:
+    def display_all(self) -> None:
         if not self.__products:
             print("Inventory is empty.")
-            return []
+            return
         for product in self.__products:
             product.display_information()
         return self.__products

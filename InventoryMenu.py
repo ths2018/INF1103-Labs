@@ -1,31 +1,36 @@
+from Inventory import Inventory
 from PhysicalProduct import PhysicalProduct
 from DigitalProduct import DigitalProduct
 from CanBeShipped import CanBeShipped
 from File_handling import save_inventory
+from Product import Product
 from Supplier import Supplier
+from typing import TypeVar
+
+T = TypeVar("T", int, float)
 
 class InventoryMenu:
 
-    def __init__(self, inventory, filename):
-        self._inventory = inventory
-        self._filename = filename
+    def __init__(self, inventory: Inventory, filename: str) -> None:
+        self._inventory: Inventory = inventory
+        self._filename: str = filename
 
     @staticmethod
-    def read_number(prompt, number_type):
+    def read_number(prompt: str, number_type: type[T]) -> T | None:
         """Return the input converted to number_type, or None if it isn't valid."""
         try:
             return number_type(input(prompt))
         except ValueError:
             return None
 
-    def _find_supplier(self, supplier_id):
+    def _find_supplier(self, supplier_id: str) -> Supplier | None:
         """Return an existing Supplier with this ID from the inventory, or None."""
         for product in self._inventory.get_products():
             if product.supplier.supplier_id == supplier_id:
                 return product.supplier
         return None
 
-    def _read_supplier(self):
+    def _read_supplier(self) -> Supplier | None:
         """Ask for a supplier ID. Reuse an existing Supplier, or create a new one.
         Returns a Supplier, or None if input was invalid."""
         supplier_id = input("Supplier ID: ").strip()
@@ -46,7 +51,7 @@ class InventoryMenu:
             return None
         return Supplier(supplier_id, name, email)
 
-    def _read_product(self):
+    def _read_product(self) -> Product | None:
         """Ask for product details. Returns a Product, or None if input was invalid."""
         product_type = input("Is this a physical product or digital? (physical/digital): ").strip().lower()
         if product_type not in ("physical", "digital"):
@@ -80,7 +85,7 @@ class InventoryMenu:
             print(error)
             return None
 
-    def add_product_option(self):
+    def add_product_option(self) -> None:
         product = self._read_product()
         if product is None:
             return
@@ -92,7 +97,7 @@ class InventoryMenu:
         else:
             print("A product with that ID already exists.")
 
-    def update_stock_option(self):
+    def update_stock_option(self) -> None:
         product = self._inventory.find_product(input("Product ID to update: ").strip())
         if product is None:
             print("Product not found.")
@@ -107,7 +112,7 @@ class InventoryMenu:
         except ValueError as error:
             print(error)
 
-    def search_option(self):
+    def search_option(self) -> None:
         results = self._inventory.search_product(input("Search by ID or name: ").strip())
         if not results:
             print("No matching products.")
@@ -115,6 +120,6 @@ class InventoryMenu:
             product.display_information()
             product.display_supplier_information()
 
-    def save_option(self):
+    def save_option(self) -> None:
         save_inventory(self._inventory, self._filename)
         print("Inventory saved.")
