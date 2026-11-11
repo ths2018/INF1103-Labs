@@ -5,10 +5,10 @@ from Supplier import Supplier
 class Product(ABC):
  
     def __init__(self, product_id: str, name: str, price: float, stock: int, supplier: Supplier) -> None:
-        self.__product_id = product_id
-        self.__name = name
-        self.__price = float(price)
-        self.__stock = 0
+        self.__product_id:str = product_id
+        self.__name:str = name
+        self.__price:float = float(price)
+        self.__stock:int = 0
         self.__supplier: Supplier = supplier
         self.update_stock(stock)  # reuse validation instead of assigning directly
  
@@ -33,7 +33,7 @@ class Product(ABC):
     def supplier(self) -> Supplier:
         return self.__supplier
 
-    def display_supplier_information(self):
+    def display_supplier_information(self) -> None:
         """Show the supplier's details through this product."""
         self.__supplier.display_information()
  
