@@ -1,9 +1,11 @@
 import json
+import csv
 import os
 from Supplier import Supplier
 from Inventory import Inventory
 from Product import Product
 from ProductFactory import ProductFactory
+
 
 def product_from_dict(item: dict[str, str | int | float],
                       suppliers: dict[str, Supplier]) -> Product:
@@ -48,7 +50,6 @@ def load_inventory(filename="inventory.json"):
         return Inventory()
     return inventory
 
-
 def save_inventory(inventory, filename="inventory.json"):
     products = inventory.get_products()
 
@@ -63,3 +64,43 @@ def save_inventory(inventory, filename="inventory.json"):
     }
     with open(filename, "w") as file:
         json.dump(data, file, indent=4)
+
+def _parse_number(text: str, number_type: type, label: str):
+    """Convert text to a number, or raise a ValueError with a simple message."""
+    try:
+        return number_type(text)
+    except ValueError:
+        raise ValueError(f"{label} '{text}' is not a valid number") from None
+
+def load_products(path: str, inventory: Inventory, supplier: Supplier) -> None:
+    """Load products from a CSV file into the inventory. A bad row is skipped, not fatal."""
+    try:
+        file = open(path, newline="", encoding="utf-8")
+    except FileNotFoundError:
+        print(f"Products file not found: {path}")
+    else:
+        with file:
+            reader = csv.reader(file)
+            next(reader, None)                          # skip the header row
+            loaded = 0
+            for row in reader:
+                if not row:                             # ignore blank lines
+                    continue
+                try:
+                    if len(row) != 5:
+                        raise ValueError(f"expected 5 columns but found {len(row)}")
+                    product_type, product_id, name, price, stock = (v.strip() for v in row)
+                    product = ProductFactory.create(
+                        product_type, product_id, name,
+                        _parse_number(price, float, "price"),
+                        _parse_number(stock, int, "stock quantity"),
+                        supplier)
+                    if inventory.add_product(product):
+                        loaded += 1
+                    else:
+                        print(f"Skipped line {reader.line_num}: ID {product_id} already exists.")
+                except ValueError as error:
+                    print(f"Skipped line {reader.line_num}: {error}")
+        print(f"{loaded} products loaded.")
+    finally:
+        print("Load attempt finished.")

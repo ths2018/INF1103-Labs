@@ -5,6 +5,7 @@ from Product import Product
 from Supplier import Supplier
 from typing import TypeVar
 from ProductFactory import ProductFactory
+from Input_Helper import get_positive_float
 
 T = TypeVar("T", int, float)
 
@@ -59,14 +60,14 @@ class InventoryMenu:
 
         product_id = input("Product ID: ").strip()
         name = input("Name: ").strip()
-        price = self.read_number("Price: ", float)
+        price = get_positive_float("Price: ")
         stock = self.read_number("Stock: ", int)
         if product_type == "physical":
             extra = self.read_number("Weight (kg): ", float)
         else:
             extra = self.read_number("Download Size (MB): ", float)
 
-        if (not product_id or not name or price is None or price < 0
+        if (not product_id or not name
                 or stock is None or extra is None or extra < 0):
             print("Invalid input. Product not added.")
             return None
