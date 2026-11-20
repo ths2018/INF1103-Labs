@@ -1,13 +1,16 @@
 from Product import Product
 from OrderLine import OrderLine
+from DiscountStrategy import DiscountStrategy
+from NoDiscount import NoDiscount
 
 
 class Order:
     """Creates and owns its OrderLine objects (composition)."""
 
-    def __init__(self, order_id: str) -> None:
+    def __init__(self, order_id: str, discount: DiscountStrategy | None = None) -> None:
         self.__order_id: str = order_id
         self.__order_lines: list[OrderLine] = []
+        self.__discount: DiscountStrategy = discount if discount is not None else NoDiscount()
 
     @property
     def order_id(self) -> str:
@@ -17,6 +20,17 @@ class Order:
     def order_lines(self) -> list[OrderLine]:
         """Return a copy so outside code can't add or remove lines directly."""
         return list(self.__order_lines)
+
+    @property
+    def discount(self) -> DiscountStrategy:
+        return self.__discount
+
+    def set_discount(self, discount: DiscountStrategy) -> None:
+        self.__discount = discount
+
+    def calculate_total(self) -> float:
+        subtotal = sum((line.calculate_subtotal() for line in self.__order_lines), 0.0)
+        return self.__discount.apply(subtotal)
 
     def add_order_line(self, product: Product, quantity: int) -> None:
         """The Order creates the OrderLine itself; callers never pass one in."""
@@ -30,9 +44,6 @@ class Order:
                 self.__order_lines.remove(line)
                 return True
         return False
-
-    def calculate_total(self) -> float:
-        return sum(line.calculate_subtotal() for line in self.__order_lines)
 
     def display_information(self) -> None:
         print(f"Order {self.__order_id}")
