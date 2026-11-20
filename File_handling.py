@@ -1,20 +1,13 @@
 import json
 import os
-from PhysicalProduct import PhysicalProduct
-from DigitalProduct import DigitalProduct
 from Supplier import Supplier
 from Inventory import Inventory
+from Product import Product
+from ProductFactory import ProductFactory
 
-PRODUCT_TYPES = {
-    "physical": PhysicalProduct,
-    "digital": DigitalProduct,
-}
-
-def product_from_dict(item, suppliers):
-    """Build the right Product subclass from a saved dictionary.
-
-    suppliers is a {supplier_id: Supplier} dictionary used to link each product.
-    """
+def product_from_dict(item: dict[str, str | int | float],
+                      suppliers: dict[str, Supplier]) -> Product:
+    """Build a Product from a saved dictionary, using the factory."""
     product_type = item.get("type")
     if product_type is None:
         # Older files saved before "type" existed: infer it from the fields
@@ -22,14 +15,14 @@ def product_from_dict(item, suppliers):
             product_type = "physical"
         elif "download_size" in item:
             product_type = "digital"
-    if product_type not in PRODUCT_TYPES:
-        raise ValueError(f"Unknown product type: {product_type}")
 
     supplier_id = item.get("supplier_id")
     if supplier_id not in suppliers:
         raise ValueError(f"Unknown supplier ID: {supplier_id}")
 
-    return PRODUCT_TYPES[product_type].from_dict(item, suppliers[supplier_id])
+    extra = item.get("weight", item.get("download_size", 0.0))   # whichever one the item has
+    return ProductFactory.create(product_type, item["product_id"], item["name"],
+                                 item["price"], item["stock"], suppliers[supplier_id], extra)
 
 def load_inventory(filename="inventory.json"):
     """Load suppliers and products from JSON into an Inventory. Returns an empty Inventory if no file."""

@@ -1,11 +1,10 @@
 from Inventory import Inventory
-from PhysicalProduct import PhysicalProduct
-from DigitalProduct import DigitalProduct
 from CanBeShipped import CanBeShipped
 from File_handling import save_inventory
 from Product import Product
 from Supplier import Supplier
 from typing import TypeVar
+from ProductFactory import ProductFactory
 
 T = TypeVar("T", int, float)
 
@@ -78,9 +77,7 @@ class InventoryMenu:
             return None
 
         try:
-            if product_type == "physical":
-                return PhysicalProduct(product_id, name, price, stock, supplier, extra)
-            return DigitalProduct(product_id, name, price, stock, supplier, extra)
+            return ProductFactory.create(product_type, product_id, name, price, stock, supplier, extra)
         except ValueError as error:
             print(error)
             return None
