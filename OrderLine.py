@@ -4,9 +4,11 @@ class OrderLine:
     """One product and the quantity ordered. Created and managed by an Order."""
 
     def __init__(self, product: Product, quantity: int) -> None:
-        if not isinstance(quantity, int) or quantity <= 0:
-            raise ValueError("Quantity must be a whole number greater than 0.")
-        self.__product: Product = product    # reference only: the OrderLine does not own it
+        if not isinstance(quantity, int):
+            raise ValueError("Quantity must be a whole number.")
+        if quantity <= 0:
+            raise ValueError("Quantity must be greater than zero.")
+        self.__product: Product = product
         self.__quantity: int = quantity
 
     @property

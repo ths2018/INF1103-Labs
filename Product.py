@@ -4,11 +4,15 @@ from Supplier import Supplier
 
 class Product(ABC):
  
-    def __init__(self, product_id: str, name: str, price: float, stock: int, supplier: Supplier) -> None:
-        self.__product_id:str = product_id
-        self.__name:str = name
-        self.__price:float = float(price)
-        self.__stock:int = 0
+    def __init__(self, product_id: str, name: str, price: float, stock: int,
+                 supplier: Supplier) -> None:
+        price = float(price)
+        if price <= 0:
+            raise ValueError("Price must be greater than zero.")
+        self.__product_id: str = product_id
+        self.__name: str = name
+        self.__price: float = price
+        self.__stock: int = 0
         self.__supplier: Supplier = supplier
         self.update_stock(stock)  # reuse validation instead of assigning directly
  
@@ -40,8 +44,10 @@ class Product(ABC):
     # ---- behaviour ----
     def update_stock(self, quantity: int) -> None:
         """Set the stock level. The Product decides what is a valid value."""
-        if not isinstance(quantity, int) or quantity < 0:
-            raise ValueError("Stock must be a whole number that is 0 or more.")
+        if not isinstance(quantity, int):
+            raise ValueError("Stock quantity must be a whole number.")
+        if quantity < 0:
+            raise ValueError("Stock quantity cannot be negative.")
         self.__stock = quantity
  
     def get_display_text(self) -> str:
